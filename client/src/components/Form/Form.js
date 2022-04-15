@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {TextField, Button, Typography, Paper} from '@material-ui/core';
 import FileBase from 'react-file-base64'
+import { useHistory } from 'react-router-dom'
 import {useDispatch} from 'react-redux'
 import {useSelector} from 'react-redux';
 import useStyles from './styles'
@@ -8,9 +9,10 @@ import { createPost, updatePost } from '../../actions/posts'
 
 const Form = ({currentId, setCurrentId }) => {
     const [postData, setPostData] = useState({title: '', message: '', tags: '', selectedFile: ''});
-    const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId): null)
+    const post = useSelector((state) => currentId ? state.posts.posts.find((p) => p._id === currentId): null)
     const classes = useStyles()
     const user = JSON.parse(localStorage.getItem('profile'))
+    const history = useHistory()
     const dispatch = useDispatch();
     useEffect(() => {
         if(post) setPostData(post)
@@ -19,7 +21,7 @@ const Form = ({currentId, setCurrentId }) => {
 
         e.preventDefault();
         if(currentId){
-            dispatch(updatePost(currentId, {...postData, name: user?.result?.name}));
+            dispatch(updatePost(currentId, {...postData, name: user?.result?.name},history));
             clear()
         }else{
             dispatch(createPost({...postData, name: user?.result?.name }));
@@ -35,9 +37,9 @@ const Form = ({currentId, setCurrentId }) => {
 
     if(!user?.result?.name){
         return (
-            <Paper classesName={classes.paper}>
+            <Paper className={classes.paper}>
                 <Typography variant="h6" align="center">
-                    Please Sign in to create your own memories and like other's memories
+                    Please Sign in to create your own posts and like other's posts
                 </Typography>
             </Paper>
         )
@@ -45,11 +47,11 @@ const Form = ({currentId, setCurrentId }) => {
 
 
     return (
-        <Paper className={classes.paper}>
+        <Paper className={classes.paper} elevation={6}>
             <form autoComplete='off' noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
-               <Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a Memory</Typography> 
+               <Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a Post</Typography> 
                <TextField name="title" variant="outlined" label="title" fullWidth value={postData.title} onChange ={(e) => setPostData({...postData,title: e.target.value})} />
-               <TextField name="message" variant="outlined" label="message" fullWidth value={postData.message} onChange ={(e) => setPostData({...postData,message: e.target.value})} />
+               <TextField name="message" variant="outlined" label="review" fullWidth value={postData.message} onChange ={(e) => setPostData({...postData,message: e.target.value})} />
                <TextField name="tags" variant="outlined" label="tags" fullWidth value={postData.tags} onChange ={(e) => setPostData({...postData,tags: e.target.value.split(',')})} />
                <div className={classes.fileInput}>
                    <FileBase

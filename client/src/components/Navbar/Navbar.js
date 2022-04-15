@@ -5,7 +5,7 @@ import decode from 'jwt-decode'
 import useStyles from './styles'
 import {useDispatch} from 'react-redux'
 
-import memories from '../../images/memories.png';
+import logo from '../../images/logo.png';
 const Navbar = () => {
     const classes = useStyles();
     const [user,setUser] = useState(JSON.parse(localStorage.getItem('profile')));
@@ -31,8 +31,8 @@ const Navbar = () => {
     return (
     <AppBar className ={classes.appBar} position="static" color="inherit">
         <div className={classes.brandContainer}>
-         <Typography component={Link} to="/" className={classes.heading} variant="h2" align="center">Memories</Typography>
-         <img className={classes.image} src={memories} alt="memories" height="60" />
+         <Typography component={Link} to="/" className={classes.heading} variant="h2" align="center">VisitAndTell</Typography>
+         <img className={classes.image} src={logo} alt="logo" height="60" />
         </div>
         <Toolbar className={classes.toolbar}>
             {user ? (
